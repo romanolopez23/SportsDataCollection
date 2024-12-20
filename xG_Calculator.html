@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soccer | Data Collection Tool</title>
+    
+    <ul>
+      <li><a href="index.html">Soccer</a></li>
+      <li><a href="US_Football.html">Football</a></li>
+      <li><a class="active" href="xG_Calculator.html">Other Projects</a></li>
+      <li><a href="https://www.linkedin.com/in/romainlopezr/" target="_blank">About me</a></li>
+    </ul> 
+
+  <style>
+  body {margin:0;}
+  
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0px;
+    overflow: hidden;
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 10px 16px;
+    text-decoration: none;
+  }
+  
+  li a:hover:not(.active) {
+    background-color: green;
+  }
+  
+  .active {
+    background-color: green;
+  }
+  </style>
+  </head>
+
+
+    <style>
+      
+  
+      .header {
+        background-color: #f5f5f5;
+        margin: 0px;
+        padding: 0px;
+        text-align: center;
+      }
+  
+      #container {
+        display: flex;  
+        position: relative;
+        overflow: hidden;
+      }
+  
+  
+      #pitch {
+        width: 600px;
+        height: 400px;
+        background-color: green;
+        position: relative;
+        border: 2px solid white;
+        box-sizing: border-box;
+        cursor: crosshair;
+      }
+  
+  
+      #half-line {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        height: 100%;
+        width: 2px;
+        background-color: white;
+        transform: translateX(-50%);
+      }
+  
+      #penalty-box-left {
+        position: absolute;
+        left: 0;
+        top: calc(50% - 100px);
+        width: 120px;
+        height: 200px;
+        border: 2px solid white;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+  
+      #penalty-box-right {
+        position: absolute;
+        right: 0;
+        top: calc(50% - 100px);
+        width: 120px;
+        height: 200px;
+        border: 2px solid white;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+  
+      #middle-circle {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 120px;
+        height: 120px;
+        border: 2px solid white;
+        border-radius: 50%;
+        box-sizing: border-box;
+        }
+      
+      #six-yard-box-left {
+        position: absolute;
+        left: 0;
+        top: calc(50% - 40px);
+        width: 40px;
+        height: 80px;
+        border: 2px solid white;
+        box-sizing: border-box;
+      }
+  
+      #six-yard-box-right {
+        position: absolute;
+        right: 0;
+        top: calc(50% - 40px);
+        width: 40px;
+        height: 80px;
+        border: 2px solid white;
+        box-sizing: border-box;
+      }
+  
+      #corner-arc-top-left {
+        position: absolute;
+        left: -30px;
+        top: -30px;
+        width: 50px;
+        height: 50px;
+        border-top: 2px solid white;
+        border-right: 2px solid white;
+        border-radius: 60px;
+        box-sizing: border-box;
+        transform: rotate(90deg);
+      }
+  
+      #corner-arc-top-right {
+        position: absolute;
+        right: -30px;
+        top: -30px;
+        width: 50px;
+        height: 50px;
+        border-top: 2px solid white;
+        border-left: 2px solid white;
+        border-radius: 60px;
+        box-sizing: border-box;
+        transform: rotate(180deg);
+      }
+  
+      #corner-arc-bottom-left {
+        position: absolute;
+        left: -30px;
+        bottom: -30px;
+        width: 50px;
+        height: 50px;
+        border-bottom: 2px solid white;
+        border-right: 2px solid white;
+        border-radius: 60px;
+        box-sizing: border-box;
+        transform: rotate(0deg);
+      }
+  
+      #corner-arc-bottom-right {
+        position: absolute;
+        right: -30px;
+        bottom: -30px;
+        width: 50px;
+        height: 50px;
+        border-bottom: 2px solid white;
+        border-left: 2px solid white;
+        border-radius: 60px;
+        box-sizing: border-box;
+        transform: rotate(90deg);
+      }
+  
+      #half-line-dot {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        background-color: white;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+  
+      #penalty-dot-left {
+      position: absolute;
+      left: 12%;
+      top: calc(50% - 2px);
+      width: 4px;
+      height: 4px;
+      background-color: white;
+      border-radius: 50%;
+       }
+  
+      #penalty-dot-right {
+        position: absolute;
+      right: 12%;
+        top: calc(50% - 2px);
+        width: 4px;
+        height: 4px;
+        background-color: white;
+        border-radius: 50%;
+      }
+  
+  
+      #outside-penalty-semi-arc-left {
+      position: absolute;
+        Left: 0;
+        top: calc(50% - 75px);
+        width: 150px;
+        height: 150px;
+        border-top: 2px solid white;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        border-radius: 100% 100% 0 0;
+        border-bottom: none;
+        box-sizing: border-box;
+        transform: rotate(90deg);
+        overflow: visible;
+      }
+  
+      #outside-penalty-semi-arc-right {
+        position: absolute;
+        Right: 0;
+        top: calc(50% - 75px);
+        width: 150px;
+        height: 150px;
+        border-top: 2px solid white;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        border-radius: 100% 100% 0 0;
+        border-bottom: none;
+        box-sizing: border-box;
+        transform: rotate(-90deg);
+        overflow: visible;
+      }
+  
+      #log {
+        margin-top: 10px;
+        color: black;
+        font-size: 14px;
+        white-space: pre-line;
+      }
+  
+  
+    #player-pane .button {
+      padding: 5px 10px;
+    }
+  
+    #playerto-pane .button {
+      padding: 5px 10px;
+    }
+  
+    #pane .button {
+      padding: 5px 10px;
+    }
+  
+      #player-pane {
+        margin-left: 27px;
+      }
+  
+      #pane {
+        margin-left: 10px;
+      }
+  
+      #playerto-pane {
+        margin-left: 10px;
+      }
+  
+      #log-container {
+      margin-left: 20px;
+      }
+  
+  
+      .button {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 14px;
+        padding: 5px;
+        color: black;
+        background-color: whitesmoke;
+        border: 2px solid black;
+        cursor: pointer;
+      }
+  
+      .button.active {
+        background-color: cornflowerblue;
+      }
+  
+      .column-header {
+        font-weight: bold;
+      font-size: 14px;
+        text-decoration: underline;
+      }
+  
+      .button-header {
+        font-weight: bold;
+        font-size: 14px;
+      }
+  
+      .message {
+        margin-bottom: 10px;
+        color: red;
+        font-size: 14px;
+        text-align: center;
+      }
+  
+  .mark {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: orange;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .additional-button {
+        color: black;
+        background-color: whitesmoke;
+        border: 1px solid black;
+  }
+  
+</style>
+  
+
+<body>
+      <div class="header">
+          <h5>This is the navigation menu</h5>
+          <h1>Calculate Expected Goals (xG)</h1>
+          <h4>by <a href="https://www.linkedin.com/in/romainlopezr/" target="_blank">Romain Lopez</a></h4>
+      </div>
+  
+  
+  
+            <button class="additional-button" onclick="exportData()">Export to CSV</button>
+            <button class="additional-button" onclick="clearLastRow()">Clear Last Row</button>
+            <button class="additional-button" onclick="clearAllData()">Clear All Data</button>
+  
+            <div id="container">
+      
+            <div id="pitch" onclick="getCoordinates(event)">
+            <div id="half-line"></div>
+            <div id="penalty-box-left"></div>
+            <div id="penalty-box-right"></div>
+            <div id="middle-circle">
+            <div id="half-line-dot"></div>
+            </div>
+            <div id="semi-circle-left"></div>
+            <div id="semi-circle-right"></div>
+            <div id="six-yard-box-left"></div>
+            <div id="six-yard-box-right"></div>
+            <div id="corner-arc-top-left"></div>
+            <div id="corner-arc-top-right"></div> 
+            <div id="corner-arc-bottom-left"></div>
+            <div id="corner-arc-bottom-right"></div>
+            <div id="outside-penalty-semi-arc-left"></div> 
+            <div id="outside-penalty-semi-arc-right"></div> 
+            <div id="penalty-dot-left"></div>
+            <div id="penalty-dot-right"></div>
+            </div>
+  
+  
+      <div id="player-pane">
+      <div id="button-header" class="button-header"><strong>Players From</strong></div>
+  
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >Ederson</div>
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >Ake</div>
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >Akanji</div>
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >Dias</div>
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >Stones</div>
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >Rodri</div>
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >Gundogan</div>
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >De Bruyne</div>
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >Bernardo Silva</div>
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >Grealish</div>
+        <div class="button player-button" onclick="selectPlayer(this)" contenteditable="true" >Haaland</div>
+      </div>
+  
+  
+            <div id="pane">
+            <div id="button-header" class="button-header"><strong>Event</strong></div>
+            <div class="button action" onclick="selectName(this)">Pass Completed</div>
+            <div class="button action" onclick="selectName(this)">Pass Not Completed</div>
+            <div class="button action" onclick="selectName(this)">Cross Completed</div>
+            <div class="button action" onclick="selectName(this)">Cross Not Completed</div>
+            <div class="button action" onclick="selectName(this)">Shot - On Target</div>
+            <div class="button action" onclick="selectName(this)">Shot - Off Target</div>
+            <div class="button action" onclick="selectName(this)">Shot - Goal</div>
+            <div class="button action" onclick="selectName(this)">Ball Lost</div>
+            <div class="button action" onclick="selectName(this)">Corner</div>
+            <div class="button action" onclick="selectName(this)">Clearance</div>
+            <div class="button action" onclick="selectName(this)">Other</div>
+            </div>
+  
+        <div id="playerto-pane">
+        <div id="button-header" class="button-header"><strong>Players To</strong></div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >Ederson</div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >Ake</div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >Akanji</div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >Dias</div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >Stones</div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >Rodri</div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >Gundogan</div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >De Bruyne</div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >Bernardo Silva</div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >Grealish</div>
+        <div class="button playerto-button" onclick="selecttoPlayer(this)" contenteditable="true" >Haaland</div>
+        </div>
+  
+  
+      <div id="log-container">
+            <div id="column-header" class="column-header"><strong>Player From&nbsp&nbsp|			&nbspEvent&nbsp&nbsp|&nbspX&nbsp&nbsp|&nbspY&nbsp&nbsp|&nbspEnd X&nbsp&nbsp|&nbspEnd 		Y&nbsp&nbsp|&nbspPlayer To</strong>
+          </div>
+          <div id="message"></div>
+          <div id="log"></div>
+      </div>
+  
+  </div>
+  </body>
+  
+  
+   <script>
+    var data = []; // Array to store logged data
+    var selectedName = null; // Selected name
+    var selectedPlayer = null; // Selected player
+    var selectedtoPlayer = null; // Selected toplayer
+  
+    var passStartCoordinate = null; // Store the starting coordinate of the pass
+    var lastLogRow = null; // Store reference to the last log row element
+    var isRecordingPass = false;
+    var message = document.getElementById('message');
+    let index = 0;
+    
+  function getCoordinates(event) {
+  
+     
+      if (selectedName === null) {
+        alert('Please select an event before logging coordinates.');
+        return;
+      }
+      if (selectedPlayer === null) {
+        alert('Please select a player before logging coordinates.');
+        return;
+      }
+  
+  
+      var pitch = document.getElementById('pitch');
+      var rect = pitch.getBoundingClientRect();
+  
+      var x = event.clientX - rect.left;
+      var y = event.clientY - rect.top;
+  
+      // Convert coordinates to a 120x80 scale
+      var scaleFactorX = 120 / rect.width;
+      var scaleFactorY = 80 / rect.height;
+  
+      var xConverted = Math.round(x * scaleFactorX);
+      var yConverted = Math.round(y * scaleFactorY);
+  
+      var log = document.getElementById('log');
+      var coordinate = xConverted + ' | ' + yConverted;
+  
+  
+  
+      if (selectedName === 'Pass Completed' || selectedName === 'Pass Not Completed'|| selectedName === 'Cross Not Completed'|| selectedName === 'Cross Completed'|| selectedName === 'Corner'| selectedName === 'Clearance') {
+        if (!isRecordingPass) {
+         index++; 
+      // First click for pass start coordinates
+          passStartCoordinate = { x: xConverted, y: yConverted };
+          lastLogRow = document.createElement('div');
+          lastLogRow.textContent = selectedPlayer + ' | ' + selectedName + ' | ' + coordinate + ' | ';
+            
+      lastLogRow.style.opacity = '0';
+            lastLogRow.style.transform = 'scale(0.2)';
+  
+          log.insertBefore(lastLogRow, log.firstChild);
+          isRecordingPass = true;
+  
+      // Animate the log entry with fade-in and scale-up effects
+        setTimeout(function() {
+          lastLogRow.style.opacity = '1'; // Set opacity to 1 (visible)
+          lastLogRow.style.transform = 'scale(1)'; // Set scale to 1 (original size)
+          lastLogRow.style.transition = 'opacity 500ms, transform 500ms'; // Apply transition properties
+        }, 100);
+  
+          // Display the message
+          if (isRecordingPass) {
+            message.textContent = 'Please click on the end coordinates.';
+            message.classList.add('message');
+          }
+        } else {
+          // Second click for pass end coordinates
+          var passEndCoordinate = { x: xConverted, y: yConverted };
+          data.push({
+            x: passStartCoordinate.x,
+            y: passStartCoordinate.y,
+            name: selectedName,
+            endX: passEndCoordinate.x,
+            endY: passEndCoordinate.y,
+        player: selectedPlayer,
+        playerto: selectedtoPlayer,
+        index: index,
+          });
+  
+          lastLogRow.textContent += coordinate + ' | ' + selectedtoPlayer ;
+  
+  
+          // Remove the message
+          message.textContent = '';
+          message.classList.remove('message');
+  
+          // Reset pass recording variables
+          passStartCoordinate = null;
+          lastLogRow = null;
+          isRecordingPass = false;
+        }
+      } else {	
+  
+      if (isRecordingPass) {
+       alert('Please log the end coordinates before moving onto the next action.');
+             return;
+      }
+  
+      index++; 
+        // Log data for other events (one click)
+        data.push({
+          x: xConverted,
+          y: yConverted,
+          name: selectedName,
+      player: selectedPlayer,
+      index: index,
+        });
+  
+        var row = document.createElement('div');
+        row.textContent = selectedPlayer + ' | ' + selectedName + ' | ' + coordinate + ' | ' ;
+        row.style.opacity = '0';
+        row.style.transform = 'scale(0.2)';
+        log.insertBefore(row, log.firstChild);
+  
+  // Animate the log entry with fade-in and scale-up effects
+    setTimeout(function() {
+      row.style.opacity = '1'; // Set opacity to 1 (visible)
+      row.style.transform = 'scale(1)'; // Set scale to 1 (original size)
+      row.style.transition = 'opacity 500ms, transform 500ms'; // Apply transition properties
+    }, 100);
+  
+        // Display the message
+        message.textContent = '';
+        message.classList.remove('message');
+      }
+  
+  
+    // Create a new element for the mark
+    var mark = document.createElement('div');
+    mark.className = 'mark';
+    
+    // Set the position of the mark based on the clicked coordinates
+    mark.style.left = x + 'px';
+    mark.style.top = y + 'px';
+    
+    // Add the mark to the pitch
+    pitch.appendChild(mark);
+  
+    // Remove the mark after 3 seconds
+    setTimeout(function() {
+      mark.remove();
+    }, 500);
+    }
+  
+  function selectPlayer(button) {
+        var buttons = document.getElementById('player-pane').getElementsByClassName('button');
+  
+        // Remove active class from all buttons
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].classList.remove('active');
+        }
+  
+        // Add active class to the selected button
+        button.classList.add('active');
+  
+        // Set the selected player
+        selectedPlayer = button.innerHTML;
+      }
+  
+  function selectName(button) {
+    var buttons = document.getElementsByClassName('button');
+  
+    // Remove active class from all buttons except Player buttons
+    for (var i = 0; i < buttons.length; i++) {
+      if (!buttons[i].classList.contains('playerto-button') && !buttons[i].classList.contains('player-button')) {
+        buttons[i].classList.remove('active');
+      }
+    }
+  
+    // Add active class to the selected button
+    button.classList.add('active');
+  
+    // Set the selected name
+    selectedName = button.innerHTML;
+  }
+  
+  
+  function selecttoPlayer(button) {
+        var buttons = document.getElementById('playerto-pane').getElementsByClassName('button');
+  
+        // Remove active class from all buttons
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].classList.remove('active');
+        }
+  
+        // Add active class to the selected button
+        button.classList.add('active');
+  
+        // Set the selected player
+        selectedtoPlayer = button.innerHTML;
+      }
+  
+  function clearLastRow() {
+    if (data.length > 0) {
+      data.pop(); // Remove the first row from the data array
+      var log = document.getElementById('log');
+      var firstRow = log.firstChild;
+      log.removeChild(firstRow); // Remove the first row from the log display
+    }
+  }
+  
+  
+       function clearAllData() {
+      data = []; // Clear the data array
+       var log = document.getElementById('log');
+      log.textContent = ''; // Clear the log display
+      }
+  
+  function exportData() {
+  
+    if (data.length === 0) {
+      alert('There is no data to export.');
+      return;
+    }
+  
+    var csvContent = 'data:text/csv;charset=utf-8;';
+    csvContent += 'Extra,Index,Player From,Event,X,Y,End X,End Y,Player To\n'; // Updated column headers
+    
+    // Add data to CSV content
+    data.forEach(function (coordinate) {
+      csvContent += (coordinate.index || '') + ',' + (coordinate.player || '') + ',' + (coordinate.name || '') + ',' + (coordinate.x || '') + ',' + (coordinate.y || '') + ',' + (coordinate.endX || '') + ',' + (coordinate.endY || '') + ',' + (coordinate.playerto || '') + '\n';
+    });
+    
+    // Create a temporary link element to download the CSV file
+    var link = document.createElement('a');
+    link.href = encodeURI(csvContent);
+    link.target = '_blank';
+    link.download = 'match_data.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+  
+    </script>
+  
+  </html>
+  

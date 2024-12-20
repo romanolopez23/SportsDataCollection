@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Football | Data Collection Tool</title>
+    
+    <ul>
+      <li><a href="index.html">Soccer</a></li>
+      <li><a class="active" href="US_Football.html">Football</a></li>
+      <li><a href="xG_Calculator.html">Other Projects</a></li>
+      <li><a href="https://www.linkedin.com/in/romainlopezr/" target="_blank">About me</a></li>
+    </ul> 
+
+    <style>
+      body {
+        margin:0;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0px;
+        overflow: hidden;
+        background-color: #333;
+        position: fixed;
+        top: 0;
+        width: 100%;
+      }
+
+      li {
+        float: left;
+      }
+      
+      li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 10px 16px;
+        text-decoration: none;
+      }
+      
+      li a:hover:not(.active) {
+        background-color: green;
+      }
+      
+      .active {
+        background-color: green;
+      }
+
+
+      
+       #field {
+      background-color: white;
+      width: 1200px;
+      height: 533px;
+      margin: 0 auto;
+      transform: scale(0.70);
+      transform-origin: top left;
+      cursor: crosshair;
+      border: 2px solid black;
+    }
+
+    #field::before {
+    content: "";
+    display: block;
+    /* background-color: rgb(9, 75, 9); */
+    background-color: whitesmoke;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8.33%;
+    height: 100%;
+    border-color: black;
+    }
+
+    #field::after {
+    content: "";
+    display: block;
+    /* background-color: rgb(9, 75, 9); */
+    background-color: whitesmoke;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8.18%;
+    height: 100%;
+    border-color: black;
+    }
+    
+    .yard-line {
+      position: absolute;
+      width: 2px;
+      height: 100%;
+      background-color: gray;
+    }
+
+    .five-yard {
+      left: 12.5%;
+    }
+    
+    .fifteen-yard {
+      left: 20.833%;
+    }
+    
+    .twenty-five-yard {
+      left: 29.166%;
+    }
+
+    .thirty-five-yard {
+      left: 37.5%;
+    }
+    
+    .forty-five-yard {
+      left: 45.833%;
+    }
+    
+    .fifty-five-yard {
+      left: 54.166%;
+    }
+    
+    .sixty-five-yard {
+      left: 62.5%;
+    }
+    
+    .seventy-five-yard {
+      left: 70.833%;
+    }
+    
+    .eighty-five-yard {
+      left: 79.166%;
+    }
+    
+    .ninety-five-yard {
+      left: 87.5%;
+    }
+
+    .zero-yard {
+      left: 8.33%;
+    } 
+    .ten-yard {
+      left: 16.666%;
+    }
+    
+    .twenty-yard {
+      left: 25%;
+    }
+    
+    .thirty-yard {
+      left: 33.333%;
+    }
+    
+    .forty-yard {
+      left: 41.666%;
+    }
+    
+    .fifty-yard {
+      left: 50%;
+    }
+    
+    .sixty-yard {
+      left: 58.333%;
+    }
+    
+    .seventy-yard {
+      left: 66.666%;
+    }
+    
+    .eighty-yard {
+      left: 75%;
+    }
+    
+    .ninety-yard {
+      left: 83.333%;
+    }
+
+    .one-hundred-yard {
+      left: 91.666%;
+    }
+
+    .yard-number-top {
+      position: absolute;
+      margin-left: -15px;
+      top: 20px;
+      transform: translateX(-80%);
+      color: gray;
+      font-family: Arial, sans-serif;
+      font-size: 30px;
+      transform: rotate(180deg);
+    }
+
+    .yard-number-bottom {
+      position: absolute;
+      margin-left: 10px;
+      top: 485px;
+      transform: translateX(-80%);
+      color: gray;
+      font-family: Arial, sans-serif;
+      font-size: 30px;
+    }
+
+    .hash-mark {
+      position: absolute;
+      top: 213.12px;
+      color: black;
+      width: 0.25%;
+      height: 15px;
+      background-color: lightgray;
+      
+    }
+
+    .hash-mark1 {
+      position: absolute;
+      top: 304.8px;
+      width: 0.25%;
+      height: 15px;
+      background-color: lightgray;
+      color: black;
+    }
+
+    .hash-mark.zero-yard1 {
+      left: 9.164%;
+    }
+    .hash-mark.zero-yard2 {
+      left: 9.998%;
+    }
+    .hash-mark.zero-yard3 {
+      left: 10.832%;
+    }
+    .hash-mark.zero-yard4 {
+      left: 11.666%;
+    }
+
+    .hash-mark1.zero-yard1 {
+      left: 9.164%;
+    }
+    .hash-mark1.zero-yard2 {
+      left: 9.998%;
+    }
+    .hash-mark1.zero-yard3 {
+      left: 10.832%;
+    }
+    .hash-mark1.zero-yard4 {
+      left: 11.666%;
+    }
+
+   .hash-mark.five-yard1 {
+      left: 13.334%;
+    }
+    .hash-mark.five-yard2 {
+      left: 14.1168%;
+    }
+    .hash-mark.five-yard3 {
+      left: 15.002%;
+    }
+    .hash-mark.five-yard4 {
+      left: 15.836%;
+    }
+
+    .hash-mark1.five-yard1 {
+      left: 13.334%;
+    }
+    .hash-mark1.five-yard2 {
+      left: 14.1168%;
+    }
+    .hash-mark1.five-yard3 {
+      left: 15.002%;
+    }
+    .hash-mark1.five-yard4 {
+      left: 15.836%;
+    }
+
+    .hash-mark.ten-yard1 {
+      left: 17.504%;
+    }
+    .hash-mark.ten-yard2 {
+      left: 18.338%;
+    }
+    .hash-mark.ten-yard3 {
+      left: 19.172%;
+    }
+    .hash-mark.ten-yard4 {
+      left: 20.006%;
+    }
+
+    .hash-mark1.ten-yard1 {
+      left: 17.504%;
+    }
+    .hash-mark1.ten-yard2 {
+      left: 18.338%;
+    }
+    .hash-mark1.ten-yard3 {
+      left: 19.172%;
+    }
+    .hash-mark1.ten-yard4 {
+      left: 20.006%;
+    }
+
+    .hash-mark.fifteen-yard1 {
+      left: 21.674%;
+    }
+    .hash-mark.fifteen-yard2 {
+      left: 22.508%;
+    }
+    .hash-mark.fifteen-yard3 {
+      left: 23.342%;
+    }
+    .hash-mark.fifteen-yard4 {
+      left: 24.176%;
+    }
+
+    .hash-mark1.fifteen-yard1 {
+      left: 21.674%;
+    }
+    .hash-mark1.fifteen-yard2 {
+      left: 22.508%;
+    }
+    .hash-mark1.fifteen-yard3 {
+      left: 23.342%;
+    }
+    .hash-mark1.fifteen-yard4 {
+      left: 24.176%;
+    }
+
+    .hash-mark.twenty-yard1 {
+      left: 25.844%;
+    }
+    .hash-mark.twenty-yard2 {
+      left: 26.678%;
+    }
+    .hash-mark.twenty-yard3 {
+      left: 27.512%;
+    }
+    .hash-mark.twenty-yard4 {
+      left: 28.346%;
+    }
+
+
+    .hash-mark1.twenty-yard1 {
+      left: 25.844%;
+    }
+    .hash-mark1.twenty-yard2 {
+      left: 26.678%;
+    }
+    .hash-mark1.twenty-yard3 {
+      left: 27.512%;
+    }
+    .hash-mark1.twenty-yard4 {
+      left: 28.346%;
+    }
+
+    .hash-mark.twenty-five-yard1 {
+      left: 30.014%;
+    }
+    .hash-mark.twenty-five-yard2 {
+      left: 30.848%;
+    }
+    .hash-mark.twenty-five-yard3 {
+      left: 31.682%;
+    }
+    .hash-mark.twenty-five-yard4 {
+      left: 32.516%;
+
+    }
+    .hash-mark1.twenty-five-yard1 {
+      left: 30.014%;
+    }
+    .hash-mark1.twenty-five-yard2 {
+      left: 30.848%;
+    }
+    .hash-mark1.twenty-five-yard3 {
+      left: 31.682%;
+    }
+    .hash-mark1.twenty-five-yard4 {
+      left: 32.516%;
+    }
+
+    .hash-mark.thirty-yard1 {
+      left: 34.184%;
+    }
+    .hash-mark.thirty-yard2 {
+      left: 35.018%;
+    }
+    .hash-mark.thirty-yard3 {
+      left: 35.852%;
+    }
+    .hash-mark.thirty-yard4 {
+      left: 36.686%;
+    }
+
+    .hash-mark1.thirty-yard1 {
+      left: 34.184%;
+    }
+    .hash-mark1.thirty-yard2 {
+      left: 35.018%;
+    }
+    .hash-mark1.thirty-yard3 {
+      left: 35.852%;
+    }
+    .hash-mark1.thirty-yard4 {
+      left: 36.686%;
+    }
+
+    .hash-mark.thirty-five-yard1 {
+      left: 38.354%;
+    }
+    .hash-mark.thirty-five-yard2 {
+      left: 39.188%;
+    }
+    .hash-mark.thirty-five-yard3 {
+      left: 40.022%;
+    }
+    .hash-mark.thirty-five-yard4 {
+      left: 40.856%;
+    }
+
+    .hash-mark1.thirty-five-yard1 {
+      left: 38.354%;
+    }
+    .hash-mark1.thirty-five-yard2 {
+      left: 39.188%;
+    }
+    .hash-mark1.thirty-five-yard3 {
+      left: 40.022%;
+    }
+    .hash-mark1.thirty-five-yard4 {
+      left: 40.856%;
+    }
+
+
+
+    .hash-mark.forty-yard1 {
+      left: 42.524%;
+    }
+    .hash-mark.forty-yard2 {
+      left: 43.358%;
+    }
+    .hash-mark.forty-yard3 {
+      left: 44.192%;
+    }
+    .hash-mark.forty-yard4 {
+      left: 45.026%;
+    }
+
+    .hash-mark1.forty-yard1 {
+      left: 42.524%;
+    }
+    .hash-mark1.forty-yard2 {
+      left: 43.358%;
+    }
+    .hash-mark1.forty-yard3 {
+      left: 44.192%;
+    }
+    .hash-mark1.forty-yard4 {
+      left: 45.026%;
+    }
+
+    .hash-mark.forty-five-yard1 {
+      left: 46.694%;
+    }
+    .hash-mark.forty-five-yard2 {
+      left: 47.528%;
+    }
+    .hash-mark.forty-five-yard3 {
+      left: 48.362%;
+    }
+    .hash-mark.forty-five-yard4 {
+      left: 49.196%;
+    }
+
+    .hash-mark1.forty-five-yard1 {
+      left: 46.694%;
+    }
+    .hash-mark1.forty-five-yard2 {
+      left: 47.528%;
+    }
+    .hash-mark1.forty-five-yard3 {
+      left: 48.362%;
+    }
+    .hash-mark1.forty-five-yard4 {
+      left: 49.196%;
+    }
+
+
+    .hash-mark.fifty-yard1 {
+      left: 50.864%;
+    }
+    .hash-mark.fifty-yard2 {
+      left: 51.698%;
+    }
+    .hash-mark.fifty-yard3 {
+      left: 52.532%;
+    }
+    .hash-mark.fifty-yard4 {
+      left: 53.366%;
+    }
+
+    .hash-mark1.fifty-yard1 {
+      left: 50.864%;
+    }
+    .hash-mark1.fifty-yard2 {
+      left: 51.698%;
+    }
+    .hash-mark1.fifty-yard3 {
+      left: 52.532%;
+    }
+    .hash-mark1.fifty-yard4 {
+      left: 53.366%;
+    }
+
+    .hash-mark.fifty-five-yard1 {
+      left: 55.034%;
+    }
+    .hash-mark.fifty-five-yard2 {
+      left: 55.868%;
+    }
+    .hash-mark.fifty-five-yard3 {
+      left: 56.702%;
+    }
+    .hash-mark.fifty-five-yard4 {
+      left: 57.536%;
+    }
+
+    .hash-mark1.fifty-five-yard1 {
+      left: 55.034%;
+    }
+    .hash-mark1.fifty-five-yard2 {
+      left: 55.868%;
+    }
+    .hash-mark1.fifty-five-yard3 {
+      left: 56.702%;
+    }
+    .hash-mark1.fifty-five-yard4 {
+      left: 57.536%;
+    }
+
+    .hash-mark.sixty-yard1 {
+      left: 59.204%;
+    }
+    .hash-mark.sixty-yard2 {
+      left: 60.038%;
+    }
+    .hash-mark.sixty-yard3 {
+      left: 60.872%;
+    }
+    .hash-mark.sixty-yard4 {
+      left: 61.706%;
+    }
+
+    .hash-mark1.sixty-yard1 {
+      left: 59.204%;
+    }
+    .hash-mark1.sixty-yard2 {
+      left: 60.038%;
+    }
+    .hash-mark1.sixty-yard3 {
+      left: 60.872%;
+    }
+    .hash-mark1.sixty-yard4 {
+      left: 61.706%;
+    }
+
+    .hash-mark.sixty-five-yard1 {
+      left: 63.374%;
+    }
+    .hash-mark.sixty-five-yard2 {
+      left: 64.208%;
+    }
+    .hash-mark.sixty-five-yard3 {
+      left: 65.042%;
+    }
+    .hash-mark.sixty-five-yard4 {
+      left: 65.876%;
+    }
+
+    .hash-mark1.sixty-five-yard1 {
+      left: 63.374%;
+    }
+    .hash-mark1.sixty-five-yard2 {
+      left: 64.208%;
+    }
+    .hash-mark1.sixty-five-yard3 {
+      left: 65.042%;
+    }
+    .hash-mark1.sixty-five-yard4 {
+      left: 65.876%;
+    }
+
+    .hash-mark.seventy-yard1 {
+      left: 67.544%;
+    }
+    .hash-mark.seventy-yard2 {
+      left: 68.378%;
+    }
+    .hash-mark.seventy-yard3 {
+      left: 69.212%;
+    }
+    .hash-mark.seventy-yard4 {
+      left: 70.046%;
+    }
+
+    .hash-mark1.seventy-yard1 {
+      left: 67.544%;
+    }
+    .hash-mark1.seventy-yard2 {
+      left: 68.378%;
+    }
+    .hash-mark1.seventy-yard3 {
+      left: 69.212%;
+    }
+    .hash-mark1.seventy-yard4 {
+      left: 70.046%;
+    }
+
+    .hash-mark.seventy-five-yard1 {
+      left: 71.714%;
+    }
+    .hash-mark.seventy-five-yard2 {
+      left: 72.548%;
+    }
+    .hash-mark.seventy-five-yard3 {
+      left: 73.382%;
+    }
+    .hash-mark.seventy-five-yard4 {
+      left: 74.216%;
+    }
+
+    .hash-mark1.seventy-five-yard1 {
+      left: 71.714%;
+    }
+    .hash-mark1.seventy-five-yard2 {
+      left: 72.548%;
+    }
+    .hash-mark1.seventy-five-yard3 {
+      left: 73.382%;
+    }
+    .hash-mark1.seventy-five-yard4 {
+      left: 74.216%;
+    }
+
+    .hash-mark.eighty-yard1 {
+      left: 75.884%;
+    }
+    .hash-mark.eighty-yard2 {
+      left: 76.718%;
+    }
+    .hash-mark.eighty-yard3 {
+      left: 77.552%;
+    }
+    .hash-mark.eighty-yard4 {
+      left: 78.386%;
+    }
+
+    .hash-mark1.eighty-yard1 {
+      left: 75.884%;
+    }
+    .hash-mark1.eighty-yard2 {
+      left: 76.718%;
+    }
+    .hash-mark1.eighty-yard3 {
+      left: 77.552%;
+    }
+    .hash-mark1.eighty-yard4 {
+      left: 78.386%;
+    }
+
+    .hash-mark.eighty-five-yard1 {
+      left: 80.054%;
+    }
+    .hash-mark.eighty-five-yard2 {
+      left: 80.888%;
+    }
+    .hash-mark.eighty-five-yard3 {
+      left: 81.722%;
+    }
+    .hash-mark.eighty-five-yard4 {
+      left: 82.556%;
+    }
+
+    .hash-mark1.eighty-five-yard1 {
+      left: 80.054%;
+    }
+    .hash-mark1.eighty-five-yard2 {
+      left: 80.888%;
+    }
+    .hash-mark1.eighty-five-yard3 {
+      left: 81.722%;
+    }
+    .hash-mark1.eighty-five-yard4 {
+      left: 82.556%;
+    }
+
+    .hash-mark.ninety-yard1 {
+      left: 84.224%;
+    }
+    .hash-mark.ninety-yard2 {
+      left: 85.058%;
+    }
+    .hash-mark.ninety-yard3 {
+      left: 85.892%;
+    }
+    .hash-mark.ninety-yard4 {
+      left: 86.726%;
+    }
+
+    .hash-mark1.ninety-yard1 {
+      left: 84.224%;
+    }
+    .hash-mark1.ninety-yard2 {
+      left: 85.058%;
+    }
+    .hash-mark1.ninety-yard3 {
+      left: 85.892%;
+    }
+    .hash-mark1.ninety-yard4 {
+      left: 86.726%;
+    }
+
+    .hash-mark1.ninety-five-yard1 {
+      left: 88.394%;
+    }
+    .hash-mark1.ninety-five-yard2 {
+      left: 89.228%;
+    }
+    .hash-mark1.ninety-five-yard3 {
+      left: 90.062%;
+    }
+    .hash-mark1.ninety-five-yard4 {
+      left: 90.896%;
+    }
+
+    .hash-mark.ninety-five-yard1 {
+      left: 88.394%;
+    }
+    .hash-mark.ninety-five-yard2 {
+      left: 89.228%;
+    }
+    .hash-mark.ninety-five-yard3 {
+      left: 90.062%;
+    }
+    .hash-mark.ninety-five-yard4 {
+      left: 90.896%;
+    }
+
+
+    .logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 100px;
+      max-height: 100px;
+    }
+
+    </style>
+   
+  
+    <style>
+
+    .container {
+      position: absolute;
+      overflow: visible;
+    }
+
+    .stage-container {
+      margin-top: 0px;
+      margin-left: 850px;
+      padding: 10px;
+      position: absolute;
+    }
+
+    .button-container {
+      margin-top: 0px;
+      margin-left: 930px;
+      padding: 10px;
+      position: absolute;
+    }
+
+    .event-container {
+      margin-top: 0px;
+      margin-left: 1020px;
+      padding: 10px;
+      position: absolute;
+    }
+
+    .outcome-container {
+      margin-top: 0px;
+      margin-left: 1080px;
+      padding: 10px;
+      position: absolute;
+    }
+
+    .catchingPlayer-container {
+      margin-top: 0px;
+      margin-left: 1175px;
+      padding: 10px;
+      position: absolute;
+    }
+
+
+    .table-container {
+      flex: 1;
+      margin-top: 250px;
+      margin-left: 850px;
+      padding: 10px;
+      position: absolute;
+      overflow: scroll;
+      height: 300px;
+    }
+ 
+      .header {
+        background-color: #f5f5f5;
+        margin: 0px;
+        padding: 0px;
+        text-align: center;
+      }
+
+      body {
+        background-color: white;
+      }
+
+    #coordinates-table {
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+    
+    #coordinates-table th {
+      padding: 8px;
+      border: 1px solid black;
+      font-size: 14px; /* Change the font here */
+    }
+
+    #coordinates-table td{
+      padding: 8px;
+      border: 1px solid black;
+      font-size: 12px; /* Change the font here */
+
+    }
+    
+    #coordinates-table th {
+      background-color: lightgray;
+      font-weight: bold;
+    }
+
+    #coordinates-body {
+      font-family: Arial, sans-serif;
+      font-size: 10px; /* Change the font here */
+      overflow: visible;
+    }
+
+    .delete-button {
+      cursor: pointer;
+      color: red;
+      font-weight: bold;
+    }
+
+    .button {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 14px;
+        padding: 5px;
+        color: black;
+        background-color: whitesmoke;
+        border: 2px solid black;
+        cursor: pointer;
+      }
+
+    .button.active {
+      background-color: cornflowerblue;
+    }
+
+    #coordinates-display {
+  background-color: #5b5a5a;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  position: fixed;
+  top: 550px;
+  left: 735px;
+  z-index: 999; /* Ensures it's above other content */
+}
+
+#coordinates-display span {
+  font-weight: bold;
+}
+
+/* Optional hover effect */
+#coordinates-display:hover {
+  background-color: grey;
+  transition: background-color 0.3s;
+}
+
+    
+
+   
+  </style>
+
+
+<body>
+  
+
+  <div class="header">
+    <h5>This is the navigation menu</h5>
+    <h1>Log your match data</h1>
+    <h4>by <a href="https://www.linkedin.com/in/romainlopezr/" target="_blank">Romain Lopez</a></h4>
+  </div>
+
+  <div id="coordinates-display">
+    X: <span id="x-coordinate">0</span>, Y: <span id="y-coordinate">0</span>
+  </div>
+
+  <div class="container"> 
+  <div id="field" onclick="logCoordinates(event)">
+    <div class="yard-line zero-yard"></div>
+    <div class="yard-line five-yard"></div>
+    <div class="yard-line ten-yard"></div>
+    <div class="yard-line fifteen-yard"></div>
+    <div class="yard-line twenty-yard"></div>
+    <div class="yard-line twenty-five-yard"></div>
+    <div class="yard-line thirty-yard"></div>
+    <div class="yard-line thirty-five-yard"></div>
+    <div class="yard-line forty-yard"></div>
+    <div class="yard-line forty-five-yard"></div>
+    <div class="yard-line fifty-yard"></div>
+    <div class="yard-line fifty-five-yard"></div>
+    <div class="yard-line sixty-yard"></div>
+    <div class="yard-line sixty-five-yard"></div>
+    <div class="yard-line seventy-yard"></div>
+    <div class="yard-line seventy-five-yard"></div>
+    <div class="yard-line eighty-yard"></div>
+    <div class="yard-line eighty-five-yard"></div>
+    <div class="yard-line ninety-yard"></div>
+    <div class="yard-line ninety-five-yard"></div>
+    <div class="yard-line one-hundred-yard"></div>   
+    
+    <div class="hash-mark zero-yard1"></div>
+    <div class="hash-mark zero-yard2"></div>
+    <div class="hash-mark zero-yard3"></div>
+    <div class="hash-mark zero-yard4"></div>
+    <div class="hash-mark1 zero-yard1"></div>
+    <div class="hash-mark1 zero-yard2"></div>
+    <div class="hash-mark1 zero-yard3"></div>
+    <div class="hash-mark1 zero-yard4"></div>
+
+    <div class="hash-mark five-yard1"></div>
+    <div class="hash-mark five-yard2"></div>
+    <div class="hash-mark five-yard3"></div>
+    <div class="hash-mark five-yard4"></div>
+    <div class="hash-mark1 five-yard1"></div>
+    <div class="hash-mark1 five-yard2"></div>
+    <div class="hash-mark1 five-yard3"></div>
+    <div class="hash-mark1 five-yard4"></div>
+
+    <div class="hash-mark ten-yard1"></div>
+    <div class="hash-mark ten-yard2"></div>
+    <div class="hash-mark ten-yard3"></div>
+    <div class="hash-mark ten-yard4"></div>
+    <div class="hash-mark1 ten-yard1"></div>
+    <div class="hash-mark1 ten-yard2"></div>
+    <div class="hash-mark1 ten-yard3"></div>
+    <div class="hash-mark1 ten-yard4"></div>
+
+
+    <div class="hash-mark fifteen-yard1"></div>
+    <div class="hash-mark fifteen-yard2"></div>
+    <div class="hash-mark fifteen-yard3"></div>
+    <div class="hash-mark fifteen-yard4"></div>
+    <div class="hash-mark1 fifteen-yard1"></div>
+    <div class="hash-mark1 fifteen-yard2"></div>
+    <div class="hash-mark1 fifteen-yard3"></div>
+    <div class="hash-mark1 fifteen-yard4"></div>
+
+    <div class="hash-mark twenty-yard1"></div>
+    <div class="hash-mark twenty-yard2"></div>
+    <div class="hash-mark twenty-yard3"></div>
+    <div class="hash-mark twenty-yard4"></div>
+    <div class="hash-mark1 twenty-yard1"></div>
+    <div class="hash-mark1 twenty-yard2"></div>
+    <div class="hash-mark1 twenty-yard3"></div>
+    <div class="hash-mark1 twenty-yard4"></div>
+
+    <div class="hash-mark twenty-five-yard1"></div>
+    <div class="hash-mark twenty-five-yard2"></div>
+    <div class="hash-mark twenty-five-yard3"></div>
+    <div class="hash-mark twenty-five-yard4"></div>
+    <div class="hash-mark1 twenty-five-yard1"></div>
+    <div class="hash-mark1 twenty-five-yard2"></div>
+    <div class="hash-mark1 twenty-five-yard3"></div>
+    <div class="hash-mark1 twenty-five-yard4"></div>
+
+    <div class="hash-mark thirty-yard1"></div>
+    <div class="hash-mark thirty-yard2"></div>
+    <div class="hash-mark thirty-yard3"></div>
+    <div class="hash-mark thirty-yard4"></div>
+    <div class="hash-mark1 thirty-yard1"></div>
+    <div class="hash-mark1 thirty-yard2"></div>
+    <div class="hash-mark1 thirty-yard3"></div>
+    <div class="hash-mark1 thirty-yard4"></div>
+
+    <div class="hash-mark thirty-five-yard1"></div>
+    <div class="hash-mark thirty-five-yard2"></div>
+    <div class="hash-mark thirty-five-yard3"></div>
+    <div class="hash-mark thirty-five-yard4"></div>
+    <div class="hash-mark1 thirty-five-yard1"></div>
+    <div class="hash-mark1 thirty-five-yard2"></div>
+    <div class="hash-mark1 thirty-five-yard3"></div>
+    <div class="hash-mark1 thirty-five-yard4"></div>
+
+    <div class="hash-mark forty-yard1"></div>
+    <div class="hash-mark forty-yard2"></div>
+    <div class="hash-mark forty-yard3"></div>
+    <div class="hash-mark forty-yard4"></div>
+    <div class="hash-mark1 forty-yard1"></div>
+    <div class="hash-mark1 forty-yard2"></div>
+    <div class="hash-mark1 forty-yard3"></div>
+    <div class="hash-mark1 forty-yard4"></div>
+
+    <div class="hash-mark forty-five-yard1"></div>
+    <div class="hash-mark forty-five-yard2"></div>
+    <div class="hash-mark forty-five-yard3"></div>
+    <div class="hash-mark forty-five-yard4"></div>
+    <div class="hash-mark1 forty-five-yard1"></div>
+    <div class="hash-mark1 forty-five-yard2"></div>
+    <div class="hash-mark1 forty-five-yard3"></div>
+    <div class="hash-mark1 forty-five-yard4"></div>
+
+    <div class="hash-mark fifty-yard1"></div>
+    <div class="hash-mark fifty-yard2"></div>
+    <div class="hash-mark fifty-yard3"></div>
+    <div class="hash-mark fifty-yard4"></div>
+    <div class="hash-mark1 fifty-yard1"></div>
+    <div class="hash-mark1 fifty-yard2"></div>
+    <div class="hash-mark1 fifty-yard3"></div>
+    <div class="hash-mark1 fifty-yard4"></div>
+
+    <div class="hash-mark fifty-five-yard1"></div>
+    <div class="hash-mark fifty-five-yard2"></div>
+    <div class="hash-mark fifty-five-yard3"></div>
+    <div class="hash-mark fifty-five-yard4"></div>
+    <div class="hash-mark1 fifty-five-yard1"></div>
+    <div class="hash-mark1 fifty-five-yard2"></div>
+    <div class="hash-mark1 fifty-five-yard3"></div>
+    <div class="hash-mark1 fifty-five-yard4"></div>
+
+    <div class="hash-mark sixty-yard1"></div>
+    <div class="hash-mark sixty-yard2"></div>
+    <div class="hash-mark sixty-yard3"></div>
+    <div class="hash-mark sixty-yard4"></div>
+    <div class="hash-mark1 sixty-yard1"></div>
+    <div class="hash-mark1 sixty-yard2"></div>
+    <div class="hash-mark1 sixty-yard3"></div>
+    <div class="hash-mark1 sixty-yard4"></div>
+
+    <div class="hash-mark sixty-five-yard1"></div>
+    <div class="hash-mark sixty-five-yard2"></div>
+    <div class="hash-mark sixty-five-yard3"></div>
+    <div class="hash-mark sixty-five-yard4"></div>
+    <div class="hash-mark1 sixty-five-yard1"></div>
+    <div class="hash-mark1 sixty-five-yard2"></div>
+    <div class="hash-mark1 sixty-five-yard3"></div>
+    <div class="hash-mark1 sixty-five-yard4"></div>
+
+    <div class="hash-mark seventy-yard1"></div>
+    <div class="hash-mark seventy-yard2"></div>
+    <div class="hash-mark seventy-yard3"></div>
+    <div class="hash-mark seventy-yard4"></div>
+    <div class="hash-mark1 seventy-yard1"></div>
+    <div class="hash-mark1 seventy-yard2"></div>
+    <div class="hash-mark1 seventy-yard3"></div>
+    <div class="hash-mark1 seventy-yard4"></div>
+
+    <div class="hash-mark seventy-five-yard1"></div>
+    <div class="hash-mark seventy-five-yard2"></div>
+    <div class="hash-mark seventy-five-yard3"></div>
+    <div class="hash-mark seventy-five-yard4"></div>
+    <div class="hash-mark1 seventy-five-yard1"></div>
+    <div class="hash-mark1 seventy-five-yard2"></div>
+    <div class="hash-mark1 seventy-five-yard3"></div>
+    <div class="hash-mark1 seventy-five-yard4"></div>
+
+    <div class="hash-mark eighty-yard1"></div>
+    <div class="hash-mark eighty-yard2"></div>
+    <div class="hash-mark eighty-yard3"></div>
+    <div class="hash-mark eighty-yard4"></div>
+    <div class="hash-mark1 eighty-yard1"></div>
+    <div class="hash-mark1 eighty-yard2"></div>
+    <div class="hash-mark1 eighty-yard3"></div>
+    <div class="hash-mark1 eighty-yard4"></div>
+
+    <div class="hash-mark eighty-five-yard1"></div>
+    <div class="hash-mark eighty-five-yard2"></div>
+    <div class="hash-mark eighty-five-yard3"></div>
+    <div class="hash-mark eighty-five-yard4"></div>
+    <div class="hash-mark1 eighty-five-yard1"></div>
+    <div class="hash-mark1 eighty-five-yard2"></div>
+    <div class="hash-mark1 eighty-five-yard3"></div>
+    <div class="hash-mark1 eighty-five-yard4"></div>
+
+    <div class="hash-mark ninety-yard1"></div>
+    <div class="hash-mark ninety-yard2"></div>
+    <div class="hash-mark ninety-yard3"></div>
+    <div class="hash-mark ninety-yard4"></div>
+    <div class="hash-mark1 ninety-yard1"></div>
+    <div class="hash-mark1 ninety-yard2"></div>
+    <div class="hash-mark1 ninety-yard3"></div>
+    <div class="hash-mark1 ninety-yard4"></div>
+
+    <div class="hash-mark ninety-five-yard1"></div>
+    <div class="hash-mark ninety-five-yard2"></div>
+    <div class="hash-mark ninety-five-yard3"></div>
+    <div class="hash-mark ninety-five-yard4"></div>
+    <div class="hash-mark1 ninety-five-yard1"></div>
+    <div class="hash-mark1 ninety-five-yard2"></div>
+    <div class="hash-mark1 ninety-five-yard3"></div>
+    <div class="hash-mark1 ninety-five-yard4"></div>
+
+    
+    <div class="yard-number-top ten-yard">10</div>
+    <div class="yard-number-top twenty-yard">20</div>
+    <div class="yard-number-top thirty-yard">30</div>
+    <div class="yard-number-top forty-yard">40</div>
+    <div class="yard-number-top fifty-yard">50</div>
+    <div class="yard-number-top sixty-yard">40</div>
+    <div class="yard-number-top seventy-yard">30</div>
+    <div class="yard-number-top eighty-yard">20</div>
+    <div class="yard-number-top ninety-yard">10</div>
+
+    <div class="yard-number-bottom ten-yard">10</div>
+    <div class="yard-number-bottom twenty-yard">20</div>
+    <div class="yard-number-bottom thirty-yard">30</div>
+    <div class="yard-number-bottom forty-yard">40</div>
+    <div class="yard-number-bottom fifty-yard">50</div>
+    <div class="yard-number-bottom sixty-yard">40</div>
+    <div class="yard-number-bottom seventy-yard">30</div>
+    <div class="yard-number-bottom eighty-yard">20</div>
+    <div class="yard-number-bottom ninety-yard">10</div>
+
+    <img src="patch_to_your_logo.png" alt="Logo" class="logo">
+
+    
+  </div>
+
+  
+  </div>
+
+  <div class="stage-container">
+    <h4>Down</h4>
+    <div class="button player-button" onclick="StageButton(this)"  >1st Down</div>
+    <div class="button player-button" onclick="StageButton(this)"  >2nd Down</div>
+    <div class="button player-button" onclick="StageButton(this)"  >3rd Down</div>
+    <div class="button player-button" onclick="StageButton(this)"  >4th Down</div>
+  </div>
+
+  <div class="button-container">
+      <h4>Player</h4>
+      <div class="button player-button" onclick="activatePlayerButton(this)" >Quarterback</div>
+  </div>
+
+  <div class="event-container">
+      <h4>Event</h4>
+      <div class="button player-button" onclick="EventButton(this)" contenteditable="true" >Throw</div>
+      <div class="button player-button" onclick="EventButton(this)" contenteditable="true" >Rush</div>
+      <div class="button player-button" onclick="EventButton(this)" contenteditable="true" >Sack</div>
+  </div>
+
+  <div class="outcome-container">
+      <h4>Outcome</h4>
+      <div class="button player-button" onclick="OutcomeButton(this)" >Completion</div>
+      <div class="button player-button" onclick="OutcomeButton(this)" >Incompletion</div>
+      <div class="button player-button" onclick="OutcomeButton(this)" >Interception</div>
+  </div>
+
+  <div class="catchingPlayer-container">
+      <h4>Receiving Player</h4>
+      <div class="button player-button" onclick="catchingPlayerButton(this)" contenteditable="true" >Wide Receiver 1</div>
+      <div class="button player-button" onclick="catchingPlayerButton(this)" contenteditable="true" >Wide Receiver 2</div>
+      <div class="button player-button" onclick="catchingPlayerButton(this)" contenteditable="true" >Tight End 1</div>
+      <div class="button player-button" onclick="catchingPlayerButton(this)" contenteditable="true" >Tight End 2</div>
+  </div>
+
+    <div class="table-container">
+    <button id="export-button">Export to CSV</button>
+    <table id="coordinates-table">
+      <thead>
+        <tr>
+          <th>Down</th>
+          <th>Snap</th>
+          <th>Player</th>
+          <th>Event</th>
+          <th>Start X</th>
+          <th>Start Y</th>
+          <th>Outcome</th>
+          <th>End X</th>
+          <th>End Y</th>
+          <th>Receiving Player</th>
+        </tr>
+      </thead>
+      <tbody id="coordinates-body">
+      </tbody>
+  </table>
+  </div> 
+
+
+
+
+ 
+
+<script>
+  var snapX;
+  var snapY;
+  var stage;
+  var playerName; // Declare playerName as a global variable
+  var catchingplayerName; // Declare catchingplayerName as a global variable
+  var eventName; // Declare eventName as a global variable
+  var outcome; // Declare outcome as a global variable
+  var begX; // Declare begX as a global variable to store beg x coordinate
+  var begY; // Declare begY as a global variable to store beg y coordinate
+  var endX; // Declare endX as a global variable to store end x coordinate
+  var endY; // Declare endY as a global variable to store end y coordinate
+  var previousStageButton; // Declare a global variable to store the reference to the previously clicked stage button
+  var previousEventButton; // Declare a global variable to store the reference to the previously clicked event button
+  var previousPlayerButton; // Declare a global variable to store the reference to the previously clicked player button
+  var previouscatchingPlayerButton; // Declare a global variable to store the reference to the previously clicked player button
+  var previousOutcomeButton; // Declare a global variable to store the reference to the previously clicked outcome button
+  var isSecondClick = false; // Flag to track the second click
+  var isThirdClick = false; // Flag to track the third click
+
+
+
+  function StageButton(button) {
+    // Remove the active class from the previously clicked stage button
+    if (previousStageButton) {
+      previousStageButton.classList.remove('active');
+    }
+
+    // Add the active class to the clicked button
+    button.classList.add('active');
+
+    // Update the reference to the previously clicked outcome button
+    previousStageButton = button;
+
+    // Log the inner text of the clicked button in the table
+    stage = button.innerText; // Update the global outcome variable
+  
+  }
+
+  function activatePlayerButton(button) {
+  // Remove the active class from the previously clicked player button
+  if (previousPlayerButton) {
+      previousPlayerButton.classList.remove('active');
+    }
+
+    // Add the active class to the clicked button
+    button.classList.add('active');
+  
+    // Update the reference to the previously clicked player button
+    previousPlayerButton = button;
+    
+    // Log the inner text of the clicked button in the table
+    playerName = button.innerText;   // Update the global playerName variable
+  }
+
+  function EventButton(button) {
+    // Remove the active class from the previously clicked event button
+    if (previousEventButton) {
+      previousEventButton.classList.remove('active');
+    }
+  
+    // Add the active class to the clicked button
+    button.classList.add('active');
+  
+    // Update the reference to the previously clicked event button
+    previousEventButton = button;
+  
+    // Log the inner text of the clicked button in the table
+    eventName = button.innerText;   // Update the global eventName variable
+  
+    // Attach the logCoordinates function with the playerName and eventName as parameters
+    document.getElementById("field").onclick = function (event) {
+      logCoordinates(stage, event, playerName, eventName, outcome, catchingplayerName);
+    };
+  } 
+
+  function OutcomeButton(button) {
+    // Remove the active class from the previously clicked outcome button
+    if (previousOutcomeButton) {
+      previousOutcomeButton.classList.remove('active');
+    }
+
+    // Add the active class to the clicked button
+    button.classList.add('active');
+
+    // Update the reference to the previously clicked outcome button
+    previousOutcomeButton = button;
+
+    // Log the inner text of the clicked button in the table
+    outcome = button.innerText; // Update the global outcome variable
+  
+  }
+  
+  function catchingPlayerButton(button) {
+  // Remove the active class from the previously clicked player button
+  if (previouscatchingPlayerButton) {
+      previouscatchingPlayerButton.classList.remove('active');
+    }
+
+    // Add the active class to the clicked button
+    button.classList.add('active');
+  
+    // Update the reference to the previously clicked player button
+    previouscatchingPlayerButton = button;
+    
+    // Log the inner text of the clicked button in the table
+    catchingplayerName = button.innerText;   // Update the global catchingplayerName variable
+  }
+  
+  function logCoordinates(stage, event, playerName, eventName, outcome, catchingplayerName) {
+    // Function to log the coordinates on click and update the table
+    var field = document.getElementById("field");
+    var rect = field.getBoundingClientRect();
+    var x = Math.floor(((event.clientX - rect.left) /10) / 0.7);
+    var y = Math.floor(((event.clientY - rect.top) / 10) / 0.7);
+
+
+    if (stage === undefined || playerName === undefined || eventName === undefined || outcome === undefined || catchingplayerName === undefined) {
+      alert('Please select a stage, a player, an event, an outcome and a catching player before logging coordinates.');
+      return;
+    }
+
+
+    if (!isSecondClick) {
+      // First click: store start coordinates
+      snapX = x;
+      snapY = y;
+      isSecondClick = true;
+      return;
+    }
+
+    if (!isThirdClick) {
+      begX = x;
+      begY = y;
+      isThirdClick = true;
+      return;
+    }
+
+    var tableBody = document.getElementById("coordinates-body");
+    var newRow = tableBody.insertRow(0);
+
+    // Insert the Stage in the next cell
+    var stageCell = newRow.insertCell();
+    stageCell.appendChild(document.createTextNode(stage));
+
+    // Insert the snapX in the next cell
+    var snapXCell = newRow.insertCell();
+    snapXCell.appendChild(document.createTextNode(snapX));
+
+    // Insert the Player Name in the next cell
+    var playerNameCell = newRow.insertCell();
+    playerNameCell.appendChild(document.createTextNode(playerName));
+
+    // Insert the Event Name in the next cell
+    var eventCell = newRow.insertCell();
+    eventCell.appendChild(document.createTextNode(eventName));
+
+    // Insert the Start X coordinate in the next cell
+    var startXCell = newRow.insertCell();
+    startXCell.appendChild(document.createTextNode(begX)); // Use the current x value
+
+    // Insert the Start Y coordinate in the next cell
+    var startYCell = newRow.insertCell();
+    startYCell.appendChild(document.createTextNode(begY)); // Use the current y value
+    
+    // Insert the Outcome in the next cell
+    if (eventName === "Throw") {
+    var outcomeCell = newRow.insertCell();
+    outcomeCell.appendChild(document.createTextNode(outcome));
+    } else {
+    var outcomeCell = newRow.insertCell();
+    outcomeCell.appendChild(document.createTextNode(""));  
+    }
+
+
+    // Insert the End X coordinate in the next cell
+    var endXCell = newRow.insertCell();
+    endXCell.appendChild(document.createTextNode(x)); // Use the stored endX value
+
+    // Insert the End Y coordinate in the next cell
+    var endYCell = newRow.insertCell();
+    endYCell.appendChild(document.createTextNode(y)); // Use the stored endY value
+
+    // Insert the Catching Player Name in the next cell
+    if (eventName === "Throw") {
+    var catchingplayerNameCell = newRow.insertCell();
+    catchingplayerNameCell.appendChild(document.createTextNode(catchingplayerName)); // Use the stored catchingplayerName value
+    } else {
+    var catchingplayerNameCell = newRow.insertCell();
+    catchingplayerNameCell.appendChild(document.createTextNode("")); // Use the stored catchingplayerName value
+
+    }
+
+
+    // Create a delete button in the next cell
+    var deleteCell = newRow.insertCell();
+    var deleteButton = document.createElement("span");
+    deleteButton.innerHTML = "X";
+    deleteButton.className = "delete-button";
+    deleteButton.addEventListener("click", function() {
+      tableBody.removeChild(newRow);
+    });
+    deleteCell.appendChild(deleteButton);
+
+    // Reset variables and flag for the next entry
+    playerName = undefined;
+    eventName = undefined;
+    outcome = undefined;
+    isSecondClick = false;
+    isThirdClick = false;
+    endX = undefined;
+    endY = undefined;
+    begX = undefined;
+    begY = undefined;
+    catchingplayerName = undefined;
+  }
+
+function downloadCSV(data, filename) {
+  const csv = data.map(row => row.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Export button click event handler
+document.getElementById('export-button').addEventListener('click', () => {
+  const table = document.getElementById('coordinates-table');
+  const rows = table.querySelectorAll('tbody tr');
+  const data = [['Index', 'Game ID', 'Stage', 'Snap', 'Player', 'Event', 'Start X', 'Start Y', 'Outcome', 'End X', 'End Y', 'Catching Player']];
+  
+  rows.forEach((row, index) => {
+    const cells = row.querySelectorAll('td');
+    const rowData = [index + 1, '', ]; // Adding index ID and blank Game ID
+    for (let i = 0; i < cells.length - 1; i++) { // Exclude the last column
+      rowData.push(cells[i].textContent);
+    }
+    data.push(rowData);
+  });
+
+  const today = new Date();
+  const formattedDate = formatDate(today); // Using the formatDate function from the previous example
+
+  const filename = `football_data_${formattedDate}.csv`; // Adding today's date to the filename
+  downloadCSV(data, filename);
+});
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${month}_${day}_${year}`;
+}
+
+const today = new Date();
+const today_date = formatDate(today);
+console.log(today_date); // Output: MM_dd_yyyy
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Get a reference to the coordinates display elements and the field
+  const coordinatesDisplay = document.getElementById("coordinates-display");
+  const xCoordinate = document.getElementById("x-coordinate");
+  const yCoordinate = document.getElementById("y-coordinate");
+  const field = document.getElementById("field"); // Make sure this element has the id "field"
+
+  // Add a mousemove event listener to the field
+  field.addEventListener("mousemove", (e) => {
+    // Get the mouse cursor's x and y coordinates relative to the field
+    const rect = field.getBoundingClientRect();
+    var x = Math.floor(((event.clientX - rect.left) /10) / 0.7)-10;
+    var y = Math.floor(((event.clientY - rect.top) / 10) / 0.7);
+
+    // Update the coordinates display
+    xCoordinate.textContent = x;
+    yCoordinate.textContent = y;
+  });
+});
+
+
+
+
+</script>
+
+  
+  
+  
+  
+  
+
+
+</body>
+</html>
+
